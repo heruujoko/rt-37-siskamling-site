@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Jadwal Jaga Siskamling RT 37</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="styles.css">
+  <script type="module" src="app.js"></script>
+</head>
+<body>
+  <main id="content" class="app-card">
+    <!-- Pane 1: Left Brand Panel -->
+    <aside class="brand-panel">
+      <div class="brand-header">
+        <div class="brand-monogram" aria-hidden="true">37</div>
+        <div class="brand-info">
+          <h1 class="brand-title">Jadwal Jaga Siskamling</h1>
+          <p class="brand-subtitle">RT 37 Kel. Telagasri, Kec. Balikpapan Kota, Kota Balikpapan</p>
+        </div>
+      </div>
+
+      <div class="brand-meta">
+        <svg class="meta-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/>
+          <polyline points="12 6 12 12 16 14"/>
+        </svg>
+        <span>Rotasi 30 kelompok - jaga setiap malam</span>
+      </div>
+
+      <nav class="views" aria-label="Tampilan jadwal">
+        <button type="button" data-view="hari" aria-pressed="true">Hari ini</button>
+        <button type="button" data-view="minggu" aria-pressed="false">Mingguan</button>
+      </nav>
+
+      <div class="brand-footer">
+        <p>Siskamling RT 37. Data pribadi warga difilter — hanya nama dan nomor rumah.</p>
+      </div>
+    </aside>
+
+    <!-- Pane 2: Center Calendar Panel -->
+    <section class="center-panel" aria-label="Kalender jadwal">
+      <div id="week-controls" class="calendar-nav" hidden>
+        <button type="button" id="week-prev" class="nav-chevron" aria-label="Minggu sebelumnya">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <h2 id="week-label" class="calendar-heading" aria-live="polite"></h2>
+        <button type="button" id="week-next" class="nav-chevron" aria-label="Minggu berikutnya">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+      </div>
+
+      <div id="month-controls" class="calendar-nav">
+        <button type="button" id="month-prev" class="nav-chevron" aria-label="Bulan sebelumnya">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <div class="calendar-heading-wrap">
+          <h2 id="month-title" class="calendar-heading" aria-live="polite"></h2>
+          <div class="calendar-pickers">
+            <select id="month-select" class="picker-select" aria-label="Pilih bulan"></select>
+            <input id="year-input" class="picker-input" type="number" min="2020" max="2100" step="1" aria-label="Pilih tahun">
+          </div>
+        </div>
+        <button type="button" id="month-next" class="nav-chevron" aria-label="Bulan berikutnya">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+      </div>
+
+      <div id="center-content" class="center-content" aria-live="polite"></div>
+
+      <div class="tz-row">
+        <svg class="tz-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="2" y1="12" x2="22" y2="12"/>
+          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+        </svg>
+        <span>WITA (UTC+8) - Waktu Indonesia Tengah &bull; <strong id="clock-wita">--:--</strong></span>
+      </div>
+    </section>
+
+    <!-- Pane 3: Right Day-Detail Panel -->
+    <section class="detail-panel" aria-label="Detail petugas jaga">
+      <div id="detail-content" class="detail-content" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <dialog id="person-dialog" aria-labelledby="person-dialog-title">
+    <div class="dialog-content">
+      <h2 id="person-dialog-title"></h2>
+      <p id="person-dialog-house"></p>
+      <button type="button" id="person-close" class="dialog-close-btn">Tutup</button>
+    </div>
+  </dialog>
+</body>
+</html>
