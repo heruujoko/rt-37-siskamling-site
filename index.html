@@ -40,6 +40,12 @@
 
     <!-- Pane 2: Center Calendar Panel -->
     <section class="center-panel" aria-label="Kalender jadwal">
+      <div class="schedule-search">
+        <label for="name-search">Cari nama</label>
+        <input id="name-search" type="search" placeholder="Ketik nama" autocomplete="off">
+        <div id="search-results" aria-live="polite"></div>
+      </div>
+
       <div id="week-controls" class="calendar-nav" hidden>
         <button type="button" id="week-prev" class="nav-chevron" aria-label="Minggu sebelumnya">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>

@@ -69,6 +69,58 @@ button, select, input {
   border: 0;
 }
 
+/* Name search */
+.schedule-search {
+  display: grid;
+  gap: 0.4rem;
+  margin-bottom: 1.25rem;
+  min-width: 0;
+}
+
+.schedule-search label {
+  font-weight: 700;
+}
+
+.schedule-search input {
+  width: 100%;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.search-person {
+  padding: 0.6rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.search-person h3 {
+  margin: 0 0 0.35rem;
+  font-size: 0.95rem;
+}
+
+.search-date {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 0.45rem;
+  border: 0;
+  border-radius: 6px;
+  background: var(--accent-purple-light);
+  color: var(--accent-purple);
+  cursor: pointer;
+  margin-top: 0.3rem;
+}
+
+.search-date:hover {
+  text-decoration: underline;
+}
+
+.search-message {
+  margin: 0.5rem 0;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
 /* ==========================================================================
    Main 3-Pane Card Layout (Calendly style)
    ========================================================================== */

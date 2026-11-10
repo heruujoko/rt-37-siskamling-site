@@ -3,6 +3,15 @@
 Situs statis untuk menampilkan jadwal ronda bulanan. Tanpa framework, tanpa
 build step, tanpa server API — cukup berkas HTML/CSS/JS dan aset JSON.
 
+## Cari jadwal berdasarkan nama
+
+Masukkan sebagian nama tanpa memperhatikan huruf besar atau kecil. Untuk setiap
+nama yang cocok, hasil menampilkan jadwal terdekat mulai hari ini (WITA) dan
+maksimal dua jadwal sebelumnya berlabel "Sudah lewat". Pilih tanggal untuk
+membuka detail hari tersebut. Pencarian memeriksa berkas bulan berturut-turut
+di kedua arah sampai menemukan bulan yang belum tersedia; tanggal setelah
+celah tersebut tidak disimpulkan.
+
 ## Pratinjau lokal
 
 Dari root repositori:

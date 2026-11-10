@@ -130,3 +130,32 @@ export function houseNumberFor(index, name) {
   const house = index.get(name);
   return house ?? 'Belum tersedia';
 }
+
+/** Find each matching person's next assignment and two latest past assignments. */
+export function searchSchedules(entries, query, today) {
+  const needle = query.trim().toLowerCase();
+  if (!needle) return [];
+  const people = new Map();
+  const todayKey = dateKey(today);
+  for (const entry of entries) {
+    const day = parseIndonesianDate(entry.date);
+    if (!day) continue;
+    for (const person of new Set([entry.leader, ...entry.members])) {
+      if (!person || !person.toLowerCase().includes(needle)) continue;
+      const key = person.toLowerCase();
+      if (!people.has(key)) people.set(key, { person, upcoming: null, past: [] });
+      const result = people.get(key);
+      const assignment = { day, entry };
+      if (dateKey(day) >= todayKey) {
+        if (!result.upcoming || dateKey(day) < dateKey(result.upcoming.day)) result.upcoming = assignment;
+      } else {
+        result.past.push(assignment);
+      }
+    }
+  }
+  for (const result of people.values()) {
+    result.past.sort((a, b) => dateKey(b.day).localeCompare(dateKey(a.day)));
+    result.past = result.past.slice(0, 2);
+  }
+  return [...people.values()];
+}

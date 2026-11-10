@@ -9,6 +9,7 @@ import {
   loadMonth,
   parseIndonesianDate,
   peopleIndex,
+  searchSchedules,
   weekDates,
   witaDate,
 } from './schedule.mjs';
@@ -112,6 +113,85 @@ function indexByDate(schedules) {
   }
   return byDate;
 }
+
+// --- Name search -------------------------------------------------------------
+
+const searchInput = $('name-search');
+const searchResults = $('search-results');
+let searchToken = 0;
+
+function adjacentMonth(month, delta) {
+  const date = new Date(Date.UTC(month.y, month.m - 1 + delta, 1));
+  return { y: date.getUTCFullYear(), m: date.getUTCMonth() + 1 };
+}
+
+async function searchPublishedMonths(query) {
+  const token = ++searchToken;
+  if (!query.trim()) {
+    searchResults.replaceChildren();
+    return;
+  }
+  searchResults.replaceChildren(el('p', 'search-message', 'Mencari jadwal…'));
+  const origin = { y: today.y, m: today.m };
+  const schedules = [];
+  let failed = false;
+  async function fetchMonth(month) {
+    const key = `${month.y}-${month.m}`;
+    if (cache.has(key)) return { status: 'ok', schedule: cache.get(key) };
+    const result = await loadMonth((file) => fetch(`assets/schedules/${file}`), month.y, month.m);
+    if (result.status === 'ok') cache.set(key, result.schedule);
+    return result;
+  }
+  const current = await fetchMonth(origin);
+  if (current.status === 'ok') schedules.push(current.schedule);
+  if (current.status === 'error') failed = true;
+  async function scan(direction) {
+    let month = adjacentMonth(origin, direction);
+    while (month.y >= 2020 && month.y <= 2100 && token === searchToken) {
+      const result = await fetchMonth(month);
+      if (result.status === 'error') failed = true;
+      if (result.status !== 'ok') break;
+      schedules.push(result.schedule);
+      month = adjacentMonth(month, direction);
+    }
+  }
+  await Promise.all([scan(-1), scan(1)]);
+  if (token !== searchToken) return;
+  const matches = searchSchedules(schedules.flat(), query, today);
+  const content = document.createDocumentFragment();
+  if (failed) content.append(el('p', 'search-message', 'Sebagian jadwal gagal dimuat. Coba lagi.'));
+  if (!matches.length && !failed) content.append(el('p', 'search-message', 'Nama tidak ditemukan di jadwal yang tersedia.'));
+  for (const match of matches) {
+    const group = el('section', 'search-person');
+    group.append(el('h3', null, match.person));
+    if (!match.upcoming) group.append(el('p', 'search-message', 'Jadwal berikutnya belum tersedia.'));
+    for (const [assignment, label] of [
+      ...(match.upcoming ? [[match.upcoming, 'Berikutnya']] : []),
+      ...match.past.map((past) => [past, 'Sudah lewat']),
+    ]) {
+      const button = el('button', 'search-date', `${label}: ${assignment.entry.date} · ${assignment.entry.name}`);
+      button.type = 'button';
+      button.addEventListener('click', () => {
+        selectedDay = assignment.day;
+        monthYear = { y: assignment.day.y, m: assignment.day.m };
+        view = 'hari';
+        location.hash = 'hari';
+        for (const viewButton of document.querySelectorAll('.views button')) {
+          viewButton.setAttribute('aria-pressed', String(viewButton.dataset.view === view));
+        }
+        $('week-controls').hidden = true;
+        $('month-controls').hidden = false;
+        showCalendar(false);
+      });
+      group.append(button);
+    }
+    content.append(group);
+  }
+  content.append(el('p', 'search-message', 'Hasil terbatas pada jadwal bulan yang tersedia.'));
+  searchResults.replaceChildren(content);
+}
+
+searchInput.addEventListener('input', () => searchPublishedMonths(searchInput.value));
 
 // --- Right Day-Detail Panel Rendering -----------------------------------------
 
@@ -487,6 +567,7 @@ function tickToday() {
   updateClock();
   if (dateKey(now) !== dateKey(today)) {
     today = now;
+    if (searchInput.value.trim()) searchPublishedMonths(searchInput.value);
     if (view === 'hari') {
       selectedDay = today;
       monthYear = { y: today.y, m: today.m };
